@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IES Conductor – AI-native business platform prototype</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#F4F6FA;--pn:#fff;--ink:#12213F;--mut:#5B6785;--ln:#DDE3EE;--blue:#1F5FFF;--bl2:#E6EEFF;--gr:#12805C;--gr2:#DDF3EA;--am:#A66300;--am2:#FDEFD3;--vi:#6A3FE0;--vi2:#ECE6FD;--rd:#B3261E}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1526;--pn:#152139;--ink:#E8EDF8;--mut:#9AA7C4;--ln:#26334F;--blue:#6E9BFF;--bl2:#1B2E5C;--gr:#4CD3A0;--gr2:#0F3A2C;--am:#F2B550;--am2:#3E2C09;--vi:#B49BFF;--vi2:#2B2255;--rd:#FF8A80}}
+:root[data-theme="dark"]{--bg:#0D1526;--pn:#152139;--ink:#E8EDF8;--mut:#9AA7C4;--ln:#26334F;--blue:#6E9BFF;--bl2:#1B2E5C;--gr:#4CD3A0;--gr2:#0F3A2C;--am:#F2B550;--am2:#3E2C09;--vi:#B49BFF;--vi2:#2B2255;--rd:#FF8A80}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.app{display:flex;height:100%}
+nav{width:216px;flex:none;background:var(--pn);border-right:1px solid var(--ln);padding:16px 10px;display:flex;flex-direction:column;gap:2px;overflow:auto}
+.logo{font-weight:800;font-size:17px;padding:4px 10px 14px;letter-spacing:-.02em}.logo small{display:block;font-weight:500;font-size:12px;color:var(--mut)}
+nav h6{margin:14px 10px 4px;font-size:12px;color:var(--mut);font-weight:600}
+.ni{border:0;background:none;text-align:left;padding:8px 10px;border-radius:8px;display:flex;justify-content:space-between;align-items:center}
+.ni:hover{background:var(--bg)}.ni.on{background:var(--bl2);color:var(--blue);font-weight:700}
+.dot{background:var(--rd);color:#fff;border-radius:9px;font-size:11px;padding:0 6px;font-weight:700}
+main{flex:1;overflow:auto;padding:22px 28px 60px}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-size:24px;letter-spacing:-.02em;margin:0 0 2px}h2{font-size:16px;margin:0 0 8px}.sub{color:var(--mut);margin:0 0 18px}
+.grid{display:grid;gap:12px}.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:12px;padding:14px 16px}
+.kpi b{font-size:26px;letter-spacing:-.02em;display:block}.kpi span{color:var(--mut);font-size:13px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:20px}
+.a{background:var(--gr2);color:var(--gr)}.s{background:var(--am2);color:var(--am)}.e{background:var(--vi2);color:var(--vi)}.b{background:var(--bl2);color:var(--blue)}
+.seg{display:inline-flex;border:1px solid var(--ln);border-radius:8px;overflow:hidden;margin:8px 0 6px}
+.seg button{border:0;background:none;padding:4px 10px;font-size:13px}.seg button.on{background:var(--blue);color:#fff;font-weight:600}
+.btn{border:1px solid var(--ln);background:var(--pn);padding:7px 14px;border-radius:8px;font-weight:600}
+.btn.p{background:var(--blue);border-color:var(--blue);color:#fff}.btn.v{background:var(--vi);border-color:var(--vi);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.sp{justify-content:space-between}
+.mut{color:var(--mut);font-size:13px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--ln)}.step:last-child{border:0}
+.ic{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--bg);border:1px solid var(--ln)}
+.ic.done{background:var(--gr);color:#fff;border-color:var(--gr)}.ic.run{border-color:var(--blue);color:var(--blue);animation:pl 1s infinite}.ic.hold{background:var(--am);color:#fff;border-color:var(--am)}
+@keyframes pl{50%{box-shadow:0 0 0 5px var(--bl2)}}@media(prefers-reduced-motion:reduce){.ic.run{animation:none}}
+.bar{height:8px;border-radius:5px;background:var(--ln);overflow:hidden}.bar i{display:block;height:100%;background:var(--blue);transition:width .4s}
+.exc{border:1.5px solid var(--am);background:var(--am2);border-radius:12px;padding:14px 16px;margin:12px 0}
+.chat{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.msg{max-width:88%;padding:10px 14px;border-radius:12px;background:var(--pn);border:1px solid var(--ln)}.msg.u{align-self:flex-end;background:var(--blue);color:#fff;border:0}
+.chip{border:1px solid var(--ln);background:var(--pn);border-radius:20px;padding:6px 12px;font-size:14px}.chip:hover{border-color:var(--blue)}
+.src{font-size:12px;color:var(--mut);margin-top:6px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--ln);margin-bottom:14px;overflow:auto}
+.tabs button{border:0;background:none;padding:8px 14px;border-bottom:3px solid transparent;font-weight:600;color:var(--mut);white-space:nowrap}.tabs button.on{color:var(--vi);border-color:var(--vi)}
+pre{background:#0B1220;color:#CFE0FF;border-radius:10px;padding:12px;overflow:auto;font-size:12.5px;margin:8px 0;max-height:260px}
+select,input[type=range]{font:inherit;color:inherit;background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:6px}input[type=range]{width:100%;padding:0}
+.modal{position:fixed;inset:0;background:rgba(5,10,25,.55);display:grid;place-items:center;padding:16px;z-index:9}.modal .card{max-width:480px;width:100%}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:10}#toast.on{opacity:1}
+.note{font-size:12.5px;color:var(--mut);border-left:3px solid var(--blue);padding-left:10px;margin:14px 0}
+@media(max-width:720px){.app{flex-direction:column}nav{width:100%;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--ln);padding:8px}nav h6,.logo small{display:none}.logo{padding:8px 10px}.ni{white-space:nowrap}main{padding:16px}}
+</style></head><body>
+<div class="app">
+<nav id="nav"></nav>
+<main><div class="wrap" id="v"></div></main>
+</div>
+<div id="toast"></div><div id="mod"></div>
+<script>
+const $=s=>document.querySelector(s);
+const st={view:'home',close:0,resolved:false,tab:'discover',tool:0,cert:0,pub:false,inst:{},mode:{close:'a',ap:'s',pay:'s',col:'a',tax:'e'},model:'task',vol:20000,q:[]};
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2200)};
+const NAV=[['Finance leader'],['home','Command center'],['close','Month-end close'],['advisor','Ask advisor'],['market','Marketplace'],['Developer'],['dev','Developer studio']];
+function nav(){$('#nav').innerHTML='<div class="logo">IES Conductor<small>Northwind Freight · 3 entities</small></div>'+NAV.map(n=>n.length==1?`<h6>${n[0]}</h6>`:`<button class="ni ${st.view==n[0]?'on':''}" onclick="go('${n[0]}')">${n[1]}${n[0]=='home'&&!st.resolved?'<span class="dot">3</span>':''}</button>`).join('')}
+function go(v){st.view=v;nav();render();document.querySelector('main').scrollTo(0,0)}
+const MODES={a:['Autonomous','a','Acts alone, logs every action, reversible for 30 days'],s:['Assisted','s','Drafts and proposes; you approve before posting'],e:['Expert-led','e','Prepares the brief; an Intuit expert decides with you']};
+const AGENTS=[['close','Close agent','Reconciles, accrues, flags variances'],['ap','Bills agent','Codes bills, matches POs, schedules payment'],['pay','Payroll accrual agent','Books payroll and benefits across entities'],['col','Collections agent','Nudges late customers, forecasts receipts'],['tax','Sales-tax agent','Nexus checks and filings']];
+function home(){return `<h1>Good morning, Dana</h1><p class="sub">Close day 3 of 5 · you have decisions waiting, everything else is handled.</p>
+<div class="grid g3"><div class="card kpi"><b>$4.2M</b><span>Cash across 3 entities (live)</span></div><div class="card kpi"><b>62 days</b><span>Forecast runway, base case</span></div><div class="card kpi"><b>${st.resolved?'2.1':'2.4'} days</b><span>Projected close (avg was 9)</span></div></div>
+<h2 style="margin-top:22px">Your agents and how much they can do alone</h2><p class="mut" style="margin-top:-4px">You set the autonomy level per agent. Trust is earned, not assumed.</p>
+<div class="grid g2">${AGENTS.map(([k,n,d])=>{const m=st.mode[k];return `<div class="card"><div class="row sp"><b>${n}</b><span class="tag ${MODES[m][1]}">${MODES[m][0]}</span></div><div class="mut">${d}</div>
+<div class="seg" role="group" aria-label="Autonomy">${Object.keys(MODES).map(x=>`<button class="${m==x?'on':''}" onclick="setMode('${k}','${x}')">${MODES[x][0]}</button>`).join('')}</div><div class="mut">${MODES[m][2]}</div></div>`}).join('')}</div>
+<h2 style="margin-top:22px">Needs you</h2><div class="card">${st.resolved?'<div class="mut">Nothing waiting. Close agent resolved the intercompany variance.</div>':`
+<div class="step"><span class="ic hold">!</span><div style="flex:1"><b>Intercompany variance $48,210 (US ↔ UK)</b><div class="mut">Close agent is paused at step 6.</div></div><button class="btn p" onclick="go('close')">Review</button></div>`}
+<div class="step"><span class="ic">2</span><div style="flex:1"><b>Approve 14 coded bills ($92k)</b><div class="mut">Bills agent · 98% confidence</div></div><button class="btn" onclick="toast('Approved 14 bills')">Approve all</button></div>
+<div class="step"><span class="ic">3</span><div style="flex:1"><b>Nexus risk: new sales in Texas</b><div class="mut">Sales-tax agent recommends an expert review</div></div><button class="btn" onclick="expert('Texas nexus review')">Ask expert</button></div></div>`}
+function setMode(k,m){st.mode[k]=m;render();toast(AGENTS.find(a=>a[0]==k)[1]+' is now '+MODES[m][0].toLowerCase())}
+const STEPS=[['Import bank feeds, 3 entities','Autonomous','a'],['Reconcile 1,284 transactions','Autonomous · 99.1% auto-matched','a'],['Accrue payroll and benefits','Autonomous','a'],['Book depreciation and prepaids','Assisted · rules from last month','s'],['Convert UK entity to USD','Autonomous','a'],['Eliminate intercompany balances','Variance found: needs a human','e'],['Flux analysis vs last month','Autonomous · narrative drafted','a'],['Lock period and publish package','Assisted · CFO signs off','s']];
+function close(){const done=st.close;const held=done==5&&!st.resolved;
+return `<h1>Month-end close · September</h1><p class="sub">Autonomous where it's safe, assisted where judgment matters, experts where the stakes are high.</p>
+<div class="card"><div class="row sp"><b>${done>=8?'Close complete in 2.1 days':done>0?'Close agent working…':'Ready to run'}</b><button class="btn p" ${done>0&&done<8||held?'disabled':''} onclick="runClose()">${done>=8?'Run again':'Run close'}</button></div>
+<div class="bar" style="margin:10px 0"><i style="width:${done/8*100}%"></i></div>
+${STEPS.map((s,i)=>{const c=i<done?'done':i==done?(held?'hold':(st.running?'run':'')):'';return `<div class="step"><span class="ic ${c}">${c=='done'?'✓':c=='hold'?'!':i+1}</span><div style="flex:1"><b>${s[0]}</b><div class="mut">${i==5&&st.resolved?'Resolved with expert-reviewed entry':s[1]}</div></div><span class="tag ${s[2]}">${s[2]=='a'?'Auto':s[2]=='s'?'Assist':'Expert'}</span></div>`}).join('')}</div>
+${held?`<div class="exc"><b>Paused: intercompany variance of $48,210</b><p style="margin:6px 0">The agent traced it to a UK invoice booked at 1.27 instead of the 1.31 month-end rate. Proposed fix: FX adjustment entry.</p>
+<div class="mut">Confidence 78% (below your 90% autonomy threshold) · Evidence: invoice UK-4471, rate table, 3 prior months · Impact: $48k on consolidated P&amp;L</div>
+<div class="row" style="margin-top:10px"><button class="btn p" onclick="resolve(false)">Approve proposed entry</button><button class="btn v" onclick="expert('Intercompany FX variance')">Ask Intuit expert (AI brief attached)</button></div></div>`:''}
+${done>=8?'<div class="note">Result: 8 steps, 5 fully autonomous, 2 assisted, 1 expert-reviewed. Every action has an audit trail and can be reversed.</div>':''}`}
+function runClose(){st.close=0;st.resolved=false;st.running=true;tick()}
+function tick(){if(st.close>=5&&!st.resolved){st.running=false;render();nav();return}if(st.close>=8){st.running=false;render();nav();toast('Close complete');return}st.close++;render();setTimeout(tick,650)}
+function resolve(viaExpert){st.resolved=true;st.running=true;nav();toast(viaExpert?'Expert approved entry, agent resuming':'Entry posted, agent resuming');tick()}
+function expert(topic){$('#mod').innerHTML=`<div class="modal" onclick="if(event.target==this)this.innerHTML=''"><div class="card"><h2>Ask an Intuit expert</h2>
+<div class="row"><span class="tag e">CPA</span><b>Priya N.</b><span class="mut">Multi-entity specialist · replies in ~10 min</span></div>
+<p class="mut">Topic: ${topic}. Your agent already prepared a brief so you don't repeat yourself:</p>
+<ul class="mut"><li>Ledger extract and rate table attached</li><li>Agent's proposed entry and 78% confidence</li><li>Similar cases from prior closes</li></ul>
+<div class="row" style="justify-content:flex-end"><button class="btn" onclick="$('#mod').innerHTML=''">Cancel</button><button class="btn v" onclick="sendExp('${topic}')">Send brief</button></div></div></div>`}
+function sendExp(t){$('#mod').innerHTML=`<div class="modal"><div class="card"><h2>Priya reviewed your brief</h2><p>“Agreed with the FX adjustment. Use the month-end rate of 1.31 and note the policy in your close memo. I've co-signed the entry.”</p><div class="mut">Advice recorded in your audit trail · billed under your Expert plan (1 of 4 included sessions)</div><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn p" onclick="$('#mod').innerHTML='';${t.startsWith('Inter')?'resolve(true);go(\'close\')':'toast(\'Recorded\')'}">Accept and continue</button></div></div></div>`}
+const QA=[['Can we afford to hire 4 engineers in Q1?','Yes, with a condition. Hiring 4 engineers at $165k loaded adds $660k annualized. Base-case runway drops from 62 to 51 days of cash buffer, and stays above your 45-day policy floor. If the Q1 Acme renewal ($1.1M) slips, buffer falls to 38 days, so I suggest staggering two starts to March.','Sources: live ledger, payroll forecast, open AR, Acme contract · Confidence 86%','Scenario ready to save'],
+['Do we owe sales tax in Texas?','Likely yes. Your Texas sales reached $612k trailing 12 months, over the $500k economic nexus threshold. Filing starts the month after you cross it. I can draft the registration and back-tax estimate ($21k–$29k).','Sources: commerce data, state rules updated Sept 2026 · Confidence 71%. Tax is high-stakes, so an expert should confirm.','Expert review recommended'],
+['Why did gross margin fall 3 points?','Two drivers explain 2.6 of 3 points: fuel surcharge lag on the West lane (−1.8) and a one-off subcontractor charge in the UK entity (−0.8). The remaining 0.4 is mix.','Sources: revenue by lane, vendor bills, UK ledger · Confidence 93%','Drill into lanes']];
+function advisor(){return `<h1>Ask advisor</h1><p class="sub">Answers come from your live books, with sources and confidence. Low confidence or high stakes routes to a human.</p>
+<div class="row">${QA.map((q,i)=>`<button class="chip" onclick="ask(${i})">${q[0]}</button>`).join('')}</div>
+<div class="chat">${st.q.length?st.q.map(i=>`<div class="msg u">${QA[i][0]}</div><div class="msg">${QA[i][1]}<div class="src">${QA[i][2]}</div><div class="row" style="margin-top:8px"><button class="btn" onclick="toast('${QA[i][3]}')">${QA[i][3]}</button><button class="btn v" onclick="expert('${QA[i][0]}')">Ask expert</button></div></div>`).join(''):'<div class="mut">Pick a question to see how the advisor answers.</div>'}</div>`}
+function ask(i){st.q.push(i);render()}
+const APPS=[['Fuel-cost forecaster','Lanes and fuel prices feed your cash forecast','Freightly Labs',4.8,'$0.02 / forecast','Agent'],['Texas nexus monitor','Watches sales by state and drafts registrations','TaxPilot',4.6,'$49 / mo','Agent · Expert-reviewed'],['Vendor risk scout','Flags duplicate or suspicious vendors before payment','Ledgerguard',4.7,'$0.10 / bill','Agent'],['Board pack builder','Turns closed books into a board deck','Boardly',4.5,'$199 / mo','App'],['3PL data sync','Two-way sync with warehouse systems','Stackline',4.4,'Free','Integration']];
+function market(){return `<h1>Marketplace</h1><p class="sub">Certified agents and apps that use your data, inside IES. Each shows the data it can read before you install.</p><div class="grid g2">${APPS.map((a,i)=>`<div class="card"><div class="row sp"><b>${a[0]}</b><span class="tag ${a[5].includes('Expert')?'e':'b'}">${a[5]}</span></div><p class="mut" style="margin:4px 0">${a[1]}</p><div class="mut">${a[2]} · ★ ${a[3]} · ${a[4]}</div><div class="mut" style="margin:4px 0">Reads: ${['ledger, commerce','commerce, tax','vendors, bills','ledger, reports','commerce, inventory'][i]}</div><button class="btn ${st.inst[i]?'':'p'}" onclick="inst(${i})">${st.inst[i]?'Installed ✓':'Install'}</button></div>`).join('')}</div>`}
+function inst(i){st.inst[i]=!st.inst[i];render();toast(st.inst[i]?APPS[i][0]+' installed, read-only scopes granted':'Removed')}
+const TOOLS=[['ies.ledger.query','Read GL entries by entity, period, dimension','ledger:read',{entity:'US-01',period:'2026-09',account:'4000'},{rows:3,total:1284200.55,currency:'USD',as_of:'2026-09-24T09:02Z',lineage:['inv-1181','inv-1203']}],['ies.forecast.scenario','Run a cash scenario against live data','forecast:write',{add_headcount:4,start:'2027-01'},{runway_days:51,delta_days:-11,assumptions:['Acme renews','no rate change'],confidence:0.86}],['ies.close.propose_entry','Propose a journal entry for human approval','close:propose',{memo:'FX adj UK-4471',amount:48210},{status:'pending_approval',approver:'controller',audit_id:'aud_9f2'}]];
+const TABS=[['discover','Discover'],['build','Build'],['publish','Publish'],['earn','Earn']];
+function dev(){let b='';
+if(st.tab=='discover')b=`<p class="mut">AI-ready tools, not just report endpoints. Every tool is typed, scoped, and explains itself to an agent (MCP compatible).</p><div class="grid g2">${TOOLS.map((t,i)=>`<div class="card"><b style="font-family:monospace">${t[0]}</b><p class="mut" style="margin:4px 0">${t[1]}</p><span class="tag b">${t[2]}</span></div>`).join('')}</div><div class="row" style="margin-top:12px"><button class="btn v" onclick="st.tab='build';render()">Open sandbox with sample company</button></div>`;
+if(st.tab=='build'){const t=TOOLS[st.tool];b=`<div class="row"><label>Tool <select onchange="st.tool=this.value;render()">${TOOLS.map((x,i)=>`<option value="${i}" ${i==st.tool?'selected':''}>${x[0]}</option>`).join('')}</select></label><button class="btn v" onclick="runTool()">Run in sandbox</button></div><div class="grid g2"><div><div class="mut">Request</div><pre>${JSON.stringify(t[3],null,2)}</pre></div><div><div class="mut">Response ${st.ran?'(120 ms, with lineage)':''}</div><pre>${st.ran?JSON.stringify(t[4],null,2):'// press Run in sandbox'}</pre></div></div><div class="note">Sandbox uses synthetic data, so you can build and test agents without touching a real company's books.</div>`}
+if(st.tab=='publish'){const C=['Scopes are least-privilege','Accuracy eval: 94 of 100 finance cases pass','Refuses to post without approval','Security and privacy review'];b=`<div class="card">${C.map((c,i)=>`<div class="step"><span class="ic ${i<st.cert?'done':''}">${i<st.cert?'✓':i+1}</span><div>${c}</div></div>`).join('')}</div><div class="row" style="margin-top:12px"><button class="btn v" ${st.cert>0&&st.cert<4?'disabled':''} onclick="cert()">${st.cert>=4?'Re-run certification':'Run certification'}</button><button class="btn p" ${st.cert<4||st.pub?'disabled':''} onclick="st.pub=true;render();toast('Submitted to marketplace')">${st.pub?'In review ✓':'Submit to marketplace'}</button></div>`}
+if(st.tab=='earn'){const p={task:[.02,'per completed task'],sub:[49,'per customer per month'],ent:[300,'per customer per month, expert-reviewed']}[st.model];const gross=st.model=='task'?st.vol*p[0]:p[0]*st.vol/100;b=`<p class="mut">Pick a pricing model and estimate your earnings. Intuit takes 15% and handles billing.</p><div class="row"><div class="seg">${[['task','Per task'],['sub','Subscription'],['ent','Premium']].map(m=>`<button class="${st.model==m[0]?'on':''}" onclick="st.model='${m[0]}';render()">${m[1]}</button>`).join('')}</div></div><div class="card"><div class="mut">${st.model=='task'?'Tasks per month':'Customers (×100)'}: <b>${st.vol.toLocaleString()}</b></div><input type="range" min="1000" max="100000" step="1000" value="${st.vol}" oninput="st.vol=+this.value;earn()" aria-label="Volume"><div class="grid g3" style="margin-top:10px"><div class="kpi"><b id="e1">$${Math.round(gross).toLocaleString()}</b><span>Gross / month at $${p[0]} ${p[1]}</span></div><div class="kpi"><b id="e2">$${Math.round(gross*.85).toLocaleString()}</b><span>Your payout (85%)</span></div><div class="kpi"><b>${st.model=='ent'?'Expert co-review':'Auto-billed'}</b><span>Trust badge included</span></div></div></div>`}
+return `<h1>Developer studio</h1><p class="sub">From first API call to first payout, in one place.</p><div class="tabs">${TABS.map(t=>`<button class="${st.tab==t[0]?'on':''}" onclick="st.tab='${t[0]}';render()">${t[1]}</button>`).join('')}</div>${b}`}
+function runTool(){st.ran=true;render();toast('200 OK')}
+function cert(){st.cert=0;st.pub=false;const n=()=>{st.cert++;render();if(st.cert<4)setTimeout(n,600);else toast('Certified')};n()}
+function earn(){const p={task:.02,sub:49,ent:300}[st.model];const g=st.model=='task'?st.vol*p:p*st.vol/100;$('#e1').textContent='$'+Math.round(g).toLocaleString();$('#e2').textContent='$'+Math.round(g*.85).toLocaleString();document.querySelector('.mut b').textContent=st.vol.toLocaleString()}
+function render(){$('#v').innerHTML={home,close,advisor,market,dev}[st.view]()}
+document.addEventListener('click',e=>{if(e.target.closest('[onclick*="st.tab"],[onclick*="st.model"]'))setTimeout(()=>{},0)});
+nav();render();
+</script></body></html>
